@@ -58,10 +58,6 @@ let flowers = [];
 let canvas;
 let selectedFlowerType = 'random';
 let showInstructions = true;
-let isDragging = false;
-let dragStartX, dragStartY;
-let currentDragX, currentDragY;
-let previewFlower = null;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
@@ -75,8 +71,6 @@ function setup() {
 function setupCanvasInteraction() {
   canvas.elt.style.touchAction = "none";
   canvas.elt.addEventListener("pointerdown", handlePointerDown);
-  canvas.elt.addEventListener("pointermove", handlePointerMove);
-  canvas.elt.addEventListener("pointerup", handlePointerUp);
 }
 
 function setupFlowerSelector() {
@@ -88,53 +82,11 @@ function setupFlowerSelector() {
 
 function handlePointerDown(e) {
   const rect = canvas.elt.getBoundingClientRect();
-  dragStartX = e.clientX - rect.left;
-  dragStartY = e.clientY - rect.top;
-  currentDragX = dragStartX;
-  currentDragY = dragStartY;
-  isDragging = true;
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  spawnFlower(x, y);
   showInstructions = false;
-  
-  // Create preview flower
-  const flowerType = selectedFlowerType === 'random' ? 
-    random(Object.values(FLOWER_TYPES)) : 
-    selectedFlowerType;
-  const petals = floor(random(CONFIG.MIN_PETALS, CONFIG.MAX_PETALS));
-  const petalColor = random(PETAL_COLORS);
-  const stemColor = random(STEM_COLORS);
-  const centerColor = random(CENTER_COLORS);
-  const bloomSpeed = random(CONFIG.MIN_BLOOM_SPEED, CONFIG.MAX_BLOOM_SPEED);
-  
-  // Start with a reasonable default size
-  const defaultScale = 1.0;
-  previewFlower = new Flower(dragStartX, dragStartY, flowerType, petals, petalColor, stemColor, centerColor, defaultScale, bloomSpeed);
-  previewFlower.currentScale = defaultScale;
-  
   e.preventDefault();
-}
-
-function handlePointerMove(e) {
-  if (isDragging && previewFlower) {
-    const rect = canvas.elt.getBoundingClientRect();
-    currentDragX = e.clientX - rect.left;
-    currentDragY = e.clientY - rect.top;
-    
-    // Calculate distance for size
-    const distance = dist(dragStartX, dragStartY, currentDragX, currentDragY);
-    // Start from default size (1.0) and scale up based on drag distance
-    const newScale = map(distance, 0, 200, 1.0, CONFIG.MAX_SCALE);
-    previewFlower.targetScale = constrain(newScale, 1.0, CONFIG.MAX_SCALE);
-    previewFlower.currentScale = previewFlower.targetScale;
-  }
-}
-
-function handlePointerUp(e) {
-  if (isDragging && previewFlower) {
-    // Add the preview flower to the main flowers array
-    flowers.push(previewFlower);
-    previewFlower = null;
-    isDragging = false;
-  }
 }
 
 function windowResized() {
@@ -145,19 +97,9 @@ function draw() {
   background(...CONFIG.BACKGROUND_COLOR);
   updateAndDrawFlowers();
   
-  // Draw preview flower while dragging
-  if (isDragging && previewFlower) {
-    previewFlower.display();
-    drawSizeIndicator();
-  }
-  
   if (showInstructions) {
     drawInstructions();
   }
-}
-
-function drawSizeIndicator() {
-  // Removed the guide line - now only shows the preview flower
 }
 
 function drawInstructions() {
@@ -165,9 +107,7 @@ function drawInstructions() {
   textAlign(CENTER, CENTER);
   textSize(24);
   fill(100, 100, 100);
-  text("Tap and drag to grow a flower", width / 2, height / 2);
-  textSize(16);
-  text("Drag further for larger flowers", width / 2, height / 2 + 30);
+  text("Tap anywhere to grow a flower", width / 2, height / 2);
   pop();
 }
 

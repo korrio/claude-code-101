@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Generator</title>
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Interactive Flower Generator">
+    <meta property="og:description" content="Create beautiful blooming flowers with a click or tap. Choose from various flower types including daisies, roses, sunflowers, tulips, and cherry blossoms.">
+    <meta property="og:image" content="./screenshot.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://grow-a-flower.web.app/">
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Interactive Flower Generator">
+    <meta name="twitter:description" content="Create beautiful blooming flowers with a click or tap.">
+    <meta name="twitter:image" content="./screenshot.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        #flower-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        #flower-selector label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+        #flower-type {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 150px;
+        }
+        #flower-type:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+        #credit-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            color: #333;
+        }
+        #credit-box a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #credit-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- Import the p5.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <!-- Import your app.js file -->
+    <script src="app.js"></script>
+</head>
+<body>
+    <div id="flower-selector">
+        <label for="flower-type">Choose Flower Type:</label>
+        <select id="flower-type">
+            <option value="random">Random</option>
+            <option value="daisy">Daisy</option>
+            <option value="rose">Rose</option>
+            <option value="sunflower">Sunflower</option>
+            <option value="tulip">Tulip</option>
+            <option value="cherry_blossom">Cherry Blossom</option>
+        </select>
+    </div>
+    <div id="credit-box">
+        Original work by <a href="https://editor.p5js.org/completelytwo/sketches/i3OZABOug" target="_blank">completelytwo</a>
+    </div>
+    <!-- P5.js will create the canvas element automatically -->
+</body>
+</html>
