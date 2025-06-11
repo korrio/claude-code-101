@@ -62,6 +62,7 @@ let isDragging = false;
 let dragStartX, dragStartY;
 let currentDragX, currentDragY;
 let previewFlower = null;
+let deferredPrompt = null;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
@@ -70,6 +71,7 @@ function setup() {
   
   setupCanvasInteraction();
   setupFlowerSelector();
+  setupInstallPrompt();
 }
 
 function setupCanvasInteraction() {
@@ -84,6 +86,65 @@ function setupFlowerSelector() {
   selector.addEventListener('change', function(e) {
     selectedFlowerType = e.target.value;
   });
+}
+
+function setupInstallPrompt() {
+  // Check if device is mobile or tablet
+  const isMobileOrTablet = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+  
+  // Listen for the beforeinstallprompt event
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    deferredPrompt = e;
+    
+    // Show the install button only on mobile/tablet
+    if (isMobileOrTablet) {
+      const installButton = document.getElementById('install-button');
+      installButton.style.display = 'block';
+    }
+  });
+  
+  // Handle install button click
+  const installButton = document.getElementById('install-button');
+  installButton.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+      return;
+    }
+    
+    // Show the install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    // Hide the button after install or dismiss
+    installButton.style.display = 'none';
+    
+    // Clear the deferred prompt
+    deferredPrompt = null;
+  });
+  
+  // Check if app is already installed
+  window.addEventListener('appinstalled', () => {
+    // Hide the install button
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'none';
+    
+    // Clear the deferred prompt
+    deferredPrompt = null;
+  });
+  
+  // For iOS devices, show the button with custom instructions
+  if (isMobileOrTablet && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone) {
+    const installButton = document.getElementById('install-button');
+    installButton.style.display = 'block';
+    installButton.addEventListener('click', () => {
+      alert('To add this app to your home screen:\n\n1. Tap the Share button\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add"');
+    });
+  }
 }
 
 function handlePointerDown(e) {
@@ -134,7 +195,28 @@ function handlePointerUp(e) {
     flowers.push(previewFlower);
     previewFlower = null;
     isDragging = false;
+    // playBasicSound("sine",440,0.5)
+    playGameSound("coin")
   }
+}
+
+function playBasicSound(type, frequency, duration) {
+    const audioContext = new AudioContext();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    // เชื่อมต่อ nodes
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // กำหนดค่า
+    oscillator.type = type;           // 'sine', 'square', 'sawtooth', 'triangle'
+    oscillator.frequency.value = frequency;  // ความถี่ (Hz)
+    gainNode.gain.value = 0.1;      // ความดัง
+    
+    // เล่นเสียง
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration);
 }
 
 function windowResized() {

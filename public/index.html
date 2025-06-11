@@ -16,7 +16,16 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Interactive Flower Generator">
     <meta name="twitter:description" content="Create beautiful blooming flowers with a click or tap.">
-    <meta name="twitter:image" content="./screenshot.png">
+    <meta name="twitter:image" content="https://grow-a-flower.web.app/screenshot.png">
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Flower Generator">
+    <link rel="apple-touch-icon" href="./screenshot.png">
+    
     <style>
         body {
             margin: 0;
@@ -78,9 +87,52 @@
         #credit-box a:hover {
             text-decoration: underline;
         }
+        #install-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none; /* Hidden by default */
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #install-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: rgba(76, 175, 80, 1);
+        }
+        #install-button:active {
+            transform: translateY(0);
+        }
+        @media (max-width: 768px) {
+            #flower-selector {
+                top: 10px;
+                right: 10px;
+                padding: 8px;
+            }
+            #credit-box {
+                bottom: 70px;
+                right: 10px;
+                font-size: 11px;
+            }
+            #install-button {
+                bottom: 10px;
+                left: 10px;
+            }
+        }
     </style>
     <!-- Import the p5.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    
+    <script src="sound.js"></script>
     <!-- Import your app.js file -->
     <script src="app.js"></script>
 </head>
@@ -99,6 +151,7 @@
     <div id="credit-box">
         Original work by <a href="https://editor.p5js.org/completelytwo/sketches/i3OZABOug" target="_blank">completelytwo</a>
     </div>
+    <button id="install-button">Add to Home</button>
     <!-- P5.js will create the canvas element automatically -->
 </body>
 </html>

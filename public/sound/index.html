@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Sound Frequencies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #24243e, #302b63);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3)); }
+            to { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+            color: #b8b8b8;
+        }
+
+        .frequencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 0 1rem;
+        }
+
+        .frequency-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .frequency-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .frequency-card:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .frequency-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.5);
+        }
+
+        .frequency-card.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .frequency-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #ffd700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .frequency-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .frequency-description {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            line-height: 1.4;
+            position: relative;
+            z-index: 2;
+        }
+
+        .wave-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .wave-animation.active {
+            opacity: 0.3;
+            animation: wave-pulse 2s ease-out;
+        }
+
+        @keyframes wave-pulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .controls {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .mandala {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            opacity: 0.1;
+            z-index: -1;
+            animation: mandala-rotate 60s linear infinite;
+        }
+
+        @keyframes mandala-rotate {
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2rem; }
+            .frequencies-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+            .frequency-card { padding: 1.5rem 1rem; }
+            .frequency-number { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mandala">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="url(#gradient)" stroke-width="0.5" fill="none">
+                <circle cx="100" cy="100" r="80"/>
+                <circle cx="100" cy="100" r="60"/>
+                <circle cx="100" cy="100" r="40"/>
+                <circle cx="100" cy="100" r="20"/>
+                <path d="M100 20 L100 180 M20 100 L180 100 M41.7 41.7 L158.3 158.3 M158.3 41.7 L41.7 158.3"/>
+            </g>
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <div class="wave-animation" id="waveAnimation">
+        <svg viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="600" cy="400" r="50" stroke="rgba(255,215,0,0.5)" stroke-width="2" fill="none">
+                <animate attributeName="r" values="50;200;400" dur="2s" repeatCount="1"/>
+                <animate attributeName="stroke-opacity" values="0.8;0.4;0" dur="2s" repeatCount="1"/>
+            </circle>
+            <circle cx="600" cy="400" r="30" stroke="rgba(255,107,107,0.5)" stroke-width="2" fill="none">
+                <animate attributeName="r" values="30;150;300" dur="2s" begin="0.3s" repeatCount="1"/>
+                <animate attributeName="stroke-opacity" values="0.8;0.4;0" dur="2s" begin="0.3s" repeatCount="1"/>
+            </circle>
+        </svg>
+    </div>
+
+    <div class="app-container">
+        <h1 class="title">Spiritual Sound Frequencies</h1>
+        <p class="subtitle">Click on each frequency to experience its healing vibrations</p>
+
+        <div class="frequencies-grid">
+            <div class="frequency-card" onclick="playFrequency(174)">
+                <div class="frequency-number">174</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Foundation & Security<br>Pain Relief</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(285)">
+                <div class="frequency-number">285</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Healing & Regeneration<br>Tissue Repair</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(396)">
+                <div class="frequency-number">396</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Liberation from Fear<br>Root Chakra</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(417)">
+                <div class="frequency-number">417</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Facilitating Change<br>Sacral Chakra</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(528)">
+                <div class="frequency-number">528</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Love & Transformation<br>Solar Plexus Chakra</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(639)">
+                <div class="frequency-number">639</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Relationships & Connection<br>Heart Chakra</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(741)">
+                <div class="frequency-number">741</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Expression & Solutions<br>Throat Chakra</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(852)">
+                <div class="frequency-number">852</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Intuition & Awakening<br>Third Eye Chakra</div>
+            </div>
+
+            <div class="frequency-card" onclick="playFrequency(963)">
+                <div class="frequency-number">963</div>
+                <div class="frequency-label">Hz</div>
+                <div class="frequency-description">Divine Connection<br>Crown Chakra</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="stopAllSounds()">Stop All Sounds</button>
+            <button class="control-btn" onclick="playMelody()">Play Healing Melody</button>
+        </div>
+    </div>
+
+    <script>
+        let audioContext;
+        let currentOscillators = [];
+
+        // Initialize Audio Context
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Basic sound function (from your code)
+        function playBasicSound(type, frequency, duration) {
+            initAudio();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = type;
+            oscillator.frequency.value = frequency;
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + duration);
+            
+            // Store oscillator for cleanup
+            currentOscillators.push(oscillator);
+            
+            // Remove from array when it ends
+            setTimeout(() => {
+                const index = currentOscillators.indexOf(oscillator);
+                if (index > -1) {
+                    currentOscillators.splice(index, 1);
+                }
+            }, duration * 1000);
+        }
+
+        // Play frequency with visual feedback
+        function playFrequency(frequency) {
+            // Remove active class from all cards
+            document.querySelectorAll('.frequency-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to clicked card
+            event.target.closest('.frequency-card').classList.add('active');
+            
+            // Trigger wave animation
+            const waveAnimation = document.getElementById('waveAnimation');
+            waveAnimation.classList.remove('active');
+            setTimeout(() => {
+                waveAnimation.classList.add('active');
+            }, 10);
+            
+            // Play the sound using your function
+            playBasicSound('sine', frequency, 3.0);
+            
+            // Remove active class after sound duration
+            setTimeout(() => {
+                event.target.closest('.frequency-card').classList.remove('active');
+                waveAnimation.classList.remove('active');
+            }, 3000);
+        }
+
+        // Stop all currently playing sounds
+        function stopAllSounds() {
+            currentOscillators.forEach(osc => {
+                try {
+                    osc.stop();
+                } catch (e) {
+                    // Oscillator might already be stopped
+                }
+            });
+            currentOscillators = [];
+            
+            // Remove all active states
+            document.querySelectorAll('.frequency-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            document.getElementById('waveAnimation').classList.remove('active');
+        }
+
+        // Play complete healing melody function
+        function playMelody() {
+            initAudio();
+            
+            // Complete "Twinkle Twinkle Little Star" - both verses
+            const melody = [
+                // First verse: "Twinkle, twinkle, little star"
+                {note: 'C', octave: 4, duration: 0.5},
+                {note: 'C', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'A', octave: 4, duration: 0.5},
+                {note: 'A', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 1.0},
+                
+                // "How I wonder what you are"
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'D', octave: 4, duration: 0.5},
+                {note: 'D', octave: 4, duration: 0.5},
+                {note: 'C', octave: 4, duration: 1.0},
+                
+                // Short pause between verses
+                {note: 'REST', octave: 4, duration: 0.5},
+                
+                // Second verse: "Up above the world so high"
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'D', octave: 4, duration: 1.0},
+                
+                // "Like a diamond in the sky"
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'D', octave: 4, duration: 1.0},
+                
+                // Short pause
+                {note: 'REST', octave: 4, duration: 0.5},
+                
+                // Final verse repeat: "Twinkle, twinkle, little star"
+                {note: 'C', octave: 4, duration: 0.5},
+                {note: 'C', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 0.5},
+                {note: 'A', octave: 4, duration: 0.5},
+                {note: 'A', octave: 4, duration: 0.5},
+                {note: 'G', octave: 4, duration: 1.0},
+                
+                // "How I wonder what you are"
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'F', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'E', octave: 4, duration: 0.5},
+                {note: 'D', octave: 4, duration: 0.5},
+                {note: 'D', octave: 4, duration: 0.5},
+                {note: 'C', octave: 4, duration: 1.5}  // Longer final note
+            ];
+
+            const noteFrequencies = {
+                'C': [65.41, 130.81, 261.63, 523.25, 1046.50],
+                'D': [73.42, 146.83, 293.66, 587.33, 1174.66],
+                'E': [82.41, 164.81, 329.63, 659.25, 1318.51],
+                'F': [87.31, 174.61, 349.23, 698.46, 1396.91],
+                'G': [98.00, 196.00, 392.00, 783.99, 1567.98],
+                'A': [110.00, 220.00, 440.00, 880.00, 1760.00],
+                'B': [123.47, 246.94, 493.88, 987.77, 1975.53]
+            };
+            
+            let time = audioContext.currentTime + 0.1;
+            
+            melody.forEach(({note, octave, duration}) => {
+                // Skip rest notes (silence)
+                if (note === 'REST') {
+                    time += duration;
+                    return;
+                }
+                
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                
+                osc.type = 'triangle';
+                osc.frequency.value = noteFrequencies[note][octave - 1];
+                gain.gain.setValueAtTime(0.08, time);
+                gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
+                
+                osc.start(time);
+                osc.stop(time + duration);
+                
+                currentOscillators.push(osc);
+                
+                time += duration;
+            });
+            
+            // Visual feedback for the full melody
+            const waveAnimation = document.getElementById('waveAnimation');
+            waveAnimation.classList.add('active');
+            setTimeout(() => {
+                waveAnimation.classList.remove('active');
+            }, time * 1000);
+        }
+
+        // Initialize audio context on first user interaction
+        document.addEventListener('click', initAudio, { once: true });
+    </script>
+</body>
+</html>
