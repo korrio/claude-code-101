@@ -57,6 +57,7 @@ const PETAL_COLORS = [
 let flowers = [];
 let canvas;
 let selectedFlowerType = 'random';
+let showInstructions = true;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
@@ -84,6 +85,7 @@ function handlePointerDown(e) {
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
   spawnFlower(x, y);
+  showInstructions = false;
   e.preventDefault();
 }
 
@@ -94,6 +96,19 @@ function windowResized() {
 function draw() {
   background(...CONFIG.BACKGROUND_COLOR);
   updateAndDrawFlowers();
+  
+  if (showInstructions) {
+    drawInstructions();
+  }
+}
+
+function drawInstructions() {
+  push();
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  fill(100, 100, 100);
+  text("Tap anywhere to grow a flower", width / 2, height / 2);
+  pop();
 }
 
 function updateAndDrawFlowers() {
